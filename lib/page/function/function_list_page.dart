@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 
+import '../../utils/ResumableDownloader.dart';
 import '../../utils/ResumableUpload.dart';
 
 
@@ -143,6 +144,16 @@ class _FunctionListPageState extends State<FunctionListPage> with CommonButtonMi
   uploadFileByChunk(){
     ResumableUpload resumableUpload=ResumableUpload( file: selectedFile);
     resumableUpload.upload();
+  }
+
+  ///用于表示分块下载
+  downloadFileByChunk() async {
+    ResumableDownloader downloader = ResumableDownloader(
+      fileUrl: 'http://localhost:8080/download?bucketName=your-bucket-name&objectName=your-object-name',
+      savePath: '/path/to/save/file.apk',
+    );
+
+    await downloader.download();
   }
 
   ///用于表示显示提示
