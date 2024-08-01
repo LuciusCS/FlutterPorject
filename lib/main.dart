@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/services/setting_service.dart';
-import 'package:flutter_project/page/HomePage.dart';
-import 'package:flutter_project/page/SecondPage.dart';
+
 import 'package:flutter_project/page/splash/splash_view.dart';
 import 'package:flutter_project/router/route_config.dart';
 import 'package:flutter_project/utils/NavigationObserver.dart';
@@ -70,41 +69,6 @@ Future<void> main() async {
             builder: (context, widget) {
 
               return MyApp();
-              // return GetMaterialApp(
-              //   // home: SplashPage(),
-              //   // theme: AppThemes.lightTheme,
-              //
-              //   title: "GetXSkeleton",
-              //   useInheritedMediaQuery: true,
-              //   debugShowCheckedModeBanner: false,
-              //   builder: (context,widget) {
-              //     bool themeIsLight = MySharedPref.getThemeIsLight();
-              //     return Theme(
-              //       data: MyTheme.getThemeData(isLight: themeIsLight),
-              //       child: MediaQuery(
-              //         // prevent font from scalling (some people use big/small device fonts)
-              //         // but we want our app font to still the same and dont get affected
-              //         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-              //         child: widget!,
-              //       ),
-              //     );
-              //   },
-              //   // darkTheme: AppThemes.darkTheme,
-              //   // themeMode: ThemeMode.system,
-              //   initialBinding: InitialBinding(),
-              //
-              //   initialRoute: RouteConfig.splash,
-              //   getPages: RouteConfig.getPages,
-              //   // localizationsDelegates: [
-              //   //   GlobalMaterialLocalizations.delegate,
-              //   //   GlobalWidgetsLocalizations.delegate,
-              //   //   GlobalCupertinoLocalizations.delegate,
-              //   //   S.delegate,
-              //   // ],
-              //   locale:  MySharedPref.getCurrentLocal(),
-              //   translations: LocalizationService.getInstance(),
-              //
-              // );
 
             })
 
@@ -194,20 +158,6 @@ class _MyAppState extends State<MyApp> with HttpErrorListener {
     );
   }
 
-  Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(
-            settings: RouteSettings(name: "/second"),
-            builder: (context) => HomePage());
-      case '/second':
-        return MaterialPageRoute(
-            settings: RouteSettings(name: "/second"),
-            builder: (context) => SecondPage(arguments: "页面二"));
-      default:
-        return MaterialPageRoute(builder: (context) => HomePage());
-    }
-  }
 
 
   void hideKeyboard() {
