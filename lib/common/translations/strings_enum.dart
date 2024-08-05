@@ -1,4 +1,8 @@
 class Strings {
+
+
+  ///用于国际化的文字
+
   static const String hello = 'hello';
   static const String loading = 'loading';
 

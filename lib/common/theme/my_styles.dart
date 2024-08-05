@@ -73,7 +73,7 @@ class MyStyles {
           fontSize: MyFonts.buttonTextSize,
         ),
         bodyLarge: (MyFonts.bodyTextStyle).copyWith(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.bold,     ///在这里可以设置颜色申请
           fontSize: MyFonts.bodyLargeSize,
           color: isLightTheme
               ? LightThemeColors.bodyTextColor

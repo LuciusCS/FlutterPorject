@@ -59,6 +59,7 @@ Future<void> main() async {
     runApp(
         // MyApp()
 
+        ///用于对屏幕的尺寸进行适配
         ScreenUtilInit(
           // todo add your (Xd / Figma) artboard size
             designSize: const Size(375, 812),

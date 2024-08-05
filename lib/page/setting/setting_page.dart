@@ -53,7 +53,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildThemeSection() {
     final theme = Theme.of(context);
     return Container(
-        height: 300,
+        height: 300.h,
         child: Obx(() {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +62,7 @@ class _SettingPageState extends State<SettingPage> {
               Padding(padding: EdgeInsets.only(top: 100)),
 
               Container(
-                height: 110,
+                height: 110.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: theme.primaryColor,
@@ -161,9 +161,20 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
 
-          ///
 
-          Text(testTitle.value),
+          Padding(padding: EdgeInsets.only(top: 20)),
+
+
+          Text(testTitle.value,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: Colors.black,
+            ),),
+          Padding(padding: EdgeInsets.only(top: 20)),
+
+
+          Text(testTitle.value,
+            style: TextStyle(fontSize: 16),
+            ),
 
           // Text(
           //   S.of(context).settings_language,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../function/function_list_page.dart';
+import '../orientation/auto_change_page.dart';
+import '../orientation/orientation_page.dart';
 import '../tab_home/home_tab_view.dart';
 import '../tab_profile/profile_tab_view.dart';
 
@@ -24,8 +26,8 @@ class MainState {
     pageList = [
       HomeTabPage(),
       FunctionListPage(),
-      Container(color: Colors.red),
-      Container(color: Colors.green),
+      OrientationPage(),
+      AutoChangePage(),
       ProfileTabPage(),
     ];
     //Page controller
