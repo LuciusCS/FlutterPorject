@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 
+import '../../utils/ChunkedDownloader.dart';
 import '../../utils/ResumableDownloader.dart';
 import '../../utils/ResumableUpload.dart';
 
@@ -62,6 +63,15 @@ class _FunctionListPageState extends State<FunctionListPage> with CommonButtonMi
               commonButton("分块上传", Color(0xff2FA7FE), (){
                 uploadFileByChunk();
               }),
+
+              Padding(padding: EdgeInsets.only(top: 20)),
+
+              ///用于表示分块下载
+              commonButton("分块下载", Color(0xff2FA7FE), (){
+                _startDownload();
+              }),
+
+
 
 
 
@@ -147,14 +157,35 @@ class _FunctionListPageState extends State<FunctionListPage> with CommonButtonMi
   }
 
   ///用于表示分块下载
-  downloadFileByChunk() async {
-    ResumableDownloader downloader = ResumableDownloader(
-      fileUrl: 'http://localhost:8080/download?bucketName=your-bucket-name&objectName=your-object-name',
-      savePath: '/path/to/save/file.apk',
+  // downloadFileByChunk() async {
+  //   ResumableDownloader downloader = ResumableDownloader(
+  //     fileUrl: 'http://localhost:8080/download?bucketName=your-bucket-name&objectName=your-object-name',
+  //     savePath: '/path/to/save/file.apk',
+  //   );
+  //
+  //   await downloader.download();
+  // }
+
+  ///用于表示分块下载
+  void _startDownload() async {
+    setState(() {
+      // _isDownloading = true;
+    });
+
+    final downloader = ChunkedDownloader(
+      // url: 'http://localhost:8080/download?bucket=mybucket&object=myfile.txt',
+      url: 'http://192.168.19.123:8002/download/chunk?bucket=big-file&object=app-ble-photovoltaic-tool-24071202.apk',
+      filePath: '/path/to/save/myfile.apk',
     );
 
     await downloader.download();
+
+    // setState(() {
+    //   _isDownloading = false;
+    //   _progress = 1.0;
+    // });
   }
+
 
   ///用于表示显示提示
   void toast(String info) {
