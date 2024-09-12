@@ -15,6 +15,10 @@ import '../../common/translations/strings_enum.dart';
 // import '../../../services/setting_service.dart';
 // import '../../widgets/appbar/app_bar_widget.dart';
 
+/**
+ * 用于切换水平屏幕和垂直屏幕
+ *
+ */
 class OrientationPage extends StatefulWidget {
   const OrientationPage({Key? key}) : super(key: key);
 

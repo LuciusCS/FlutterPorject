@@ -39,7 +39,10 @@ Future<void> main() async {
     Get.put(SettingService());
 
 
-    // 捕获 Flutter 框架的异常
+
+
+
+    //方法一  捕获 Flutter 框架的异常
     FlutterError.onError = (FlutterErrorDetails details) async {
       // 输出到控制台
       // FlutterError.dumpErrorToConsole(details);
@@ -51,11 +54,18 @@ Future<void> main() async {
       if (isDebugMode) {
         FlutterError.dumpErrorToConsole(details);
       } else {
+        ///，我们使用 Zone 提供的 handleUncaughtError 语句，将 Flutter 框架的异常统一转发到当前的 Zone 中，这样我们就可以统一使用 Zone 去处理应用内的所有异常了：
         Zone.current.handleUncaughtError(details.exception, details.stack!);
         await _uploadError(details.exceptionAsString(), details.stack.toString());
 
       }
     };
+
+    // FlutterError.onError = (FlutterErrorDetails details) async {
+    //   // 转发至 Zone 中
+    //   Zone.current.handleUncaughtError(details.exception, details.stack);
+    // };
+
     runApp(
         // MyApp()
 
@@ -172,6 +182,28 @@ class _MyAppState extends State<MyApp> with HttpErrorListener {
 mixin HttpErrorListener on State<MyApp> {
   StreamSubscription? stream;
 
+  /***
+   *
+   * GlobalKey 是 Flutter 中一个非常有用的工具，
+   * 用于在应用程序的不同部分之间共享状态或引用特定的组件。它在需要跨组件树访问状态、在 Navigator 中维持页面状态、
+   * 或在表单中进行验证时特别有用。然而，由于性能开销，建议仅在确有必要的场景下使用 GlobalKey。
+   *
+   *
+   * GlobalKey 的注意事项
+      性能开销：GlobalKey 的使用会带来一些性能开销，特别是在复杂的组件树中，因为它需要在树中进行唯一性检查和维护。所以应该尽量减少 GlobalKey 的使用，只在必要的场景下使用它。
+      GlobalKey 的唯一性：一个 GlobalKey 实例应该只分配给树中的一个组件。重复使用同一个 GlobalKey 会导致错误或不可预测的行为。
+   *
+   *
+   * 1. GlobalKey 的作用
+      访问 Widget 的状态：通过 GlobalKey，你可以在组件树的其他位置访问和操作一个特定 StatefulWidget 的 State 对象。
+      跨组件树引用 Widget：GlobalKey 可以唯一标识一个 Widget，即使它在组件树的深层次中，这使得你可以从不同的地方访问它。
+      维持状态：在 Flutter 的 Navigator 中，GlobalKey 常常用于保持页面的状态，确保在页面重新构建时状态不会丢失。
+      2. GlobalKey 的使用场景
+      从父组件访问子组件的状态：如果一个子组件的状态需要由父组件或兄弟组件访问或控制，使用 GlobalKey 是一种解决方案。
+      在 Navigator 中维护页面状态：当你使用 Navigator 推送和弹出页面时，GlobalKey 可以用来确保页面在重建时能保留原有的状态。
+      表单验证：在复杂的表单中，使用 GlobalKey 可以访问 FormState，从而在表单提交时触发验证和保存操作。
+   *
+   */
   GlobalKey<NavigatorState> navKey = GlobalKey();
 
   @override

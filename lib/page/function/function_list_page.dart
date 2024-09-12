@@ -13,6 +13,9 @@ import 'package:get/get.dart';
 import '../../utils/ChunkedDownloader.dart';
 import '../../utils/ResumableDownloader.dart';
 import '../../utils/ResumableUpload.dart';
+import '../example/refresh/RefreshLoadMoreExample.dart';
+import '../example/refresh/RefreshLoadMoreExample1.dart';
+import '../example/refresh/RefreshLoadMoreExample2.dart';
 
 
 // import 'splash_logic.dart';
@@ -71,8 +74,26 @@ class _FunctionListPageState extends State<FunctionListPage> with CommonButtonMi
                 _startDownload();
               }),
 
+              Padding(padding: EdgeInsets.only(top: 20)),
 
 
+              ///用于表示下拉刷新
+              commonButton("下拉刷新", Color(0xff2FA7FE), (){
+                Get.to(() => RefreshLoadMoreExample());
+
+              }),
+              Padding(padding: EdgeInsets.only(top: 20)),
+
+              commonButton("下拉刷新1", Color(0xff2FA7FE), (){
+                Get.to(() => RefreshLoadMoreExample1());
+
+              }),
+              Padding(padding: EdgeInsets.only(top: 20)),
+
+              commonButton("下拉刷新2", Color(0xff2FA7FE), (){
+                Get.to(() => RefreshLoadMoreExample2());
+
+              }),
 
 
 

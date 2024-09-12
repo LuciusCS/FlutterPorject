@@ -15,6 +15,9 @@ import '../../common/translations/strings_enum.dart';
 // import '../../../services/setting_service.dart';
 // import '../../widgets/appbar/app_bar_widget.dart';
 
+/***
+ * 用于表示根据屏幕尺寸，对布局进行切换
+ */
 class AutoChangePage extends StatefulWidget {
   const AutoChangePage({Key? key}) : super(key: key);
 
