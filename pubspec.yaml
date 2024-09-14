@@ -46,6 +46,18 @@ dependencies:
   json_annotation: 4.9.0
   path_provider: ^2.1.4
 
+  ##Packages
+  catalog:
+    path: packages/data/catalog/
+  device:
+    path: packages/data/device/
+  utility:
+    path: packages/core/utility/
+  ui:
+    path: packages/core/ui/
+#  home:
+#    path: packages/features/home/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

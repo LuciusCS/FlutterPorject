@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ui/ui.dart';
 
 // import 'package:test_fultter/ui/pages/tab_home/widgets/home_app_bar.dart';
 //
@@ -57,6 +58,12 @@ class _HomeTabPageState extends State<HomeTabPage>
                   // _buildTrendingTvShows(),
                   // _buildNowPlayingMovies(),
                   // _buildUpcomingMovies(),
+
+                  ///用于子工程中的 import 'package:ui/ui.dart';
+                  InputStream(child: Text("测试"),),
+                  
+                  
+                  
                 ],
               ),
             ),

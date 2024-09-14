@@ -72,6 +72,10 @@ Future<void> main() async {
         ///用于对屏幕的尺寸进行适配
         ScreenUtilInit(
           // todo add your (Xd / Figma) artboard size
+          /**
+           * reenUtil 依赖于指定的基准尺寸，也就是设计稿的宽高。开发者通常在项目初始化时传入这个基准尺寸，ScreenUtil 以此为参考对所有控件进行缩放。
+           */
+
             designSize: const Size(375, 812),
             minTextAdapt: true,
             splitScreenMode: true,
