@@ -55,6 +55,9 @@ dependencies:
     path: packages/core/utility/
   ui:
     path: packages/core/ui/
+  multiple_flutters_module:
+    path: packages/core/multiple/
+
 #  home:
 #    path: packages/features/home/
 

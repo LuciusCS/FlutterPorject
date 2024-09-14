@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:multiple_flutters_module/information_page.dart';
 import 'package:ui/ui.dart';
 
 // import 'package:test_fultter/ui/pages/tab_home/widgets/home_app_bar.dart';
@@ -61,6 +62,18 @@ class _HomeTabPageState extends State<HomeTabPage>
 
                   ///用于子工程中的 import 'package:ui/ui.dart';
                   InputStream(child: Text("测试"),),
+
+                  ///用于跳转到  multiple_flutters_module 中的InformationPage
+
+                  InkWell(
+                    onTap: (){
+                      Get.to(()=>InformationPage());
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(top: 20,left: 10,bottom: 10,right: 10),
+                      child: Text("点击跳转"),
+                    ),
+                  )
                   
                   
                   
