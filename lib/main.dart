@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/services/setting_service.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:stack_trace_info/stack_trace_info.dart';
 
 import 'bindings/initial_binding.dart';
 import 'common/base/app_themes.dart';
@@ -24,25 +26,42 @@ import 'common/theme/my_theme.dart';
 import 'common/translations/localization_service.dart';
 
 Future<void> main() async {
+  // 设置全局错误处理小部件， 应用的未知不太一样
+  // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
+  //   // 打印错误信息
+  //   debugPrint(flutterErrorDetails.toString());
+  //
+  //   // 返回一个自定义的错误小部件，比如一个居中的错误文本
+  //   return Center(
+  //     child: Text(
+  //       "App错误，快去反馈给作者!",
+  //       style: TextStyle(color: Colors.red, fontSize: 18),
+  //     ),
+  //   );
+  // };
 
-
-  // 捕获 Dart 异步代码的异常
+  final StackTraceInfo info = StackTraceInfo(trace: StackTrace.current);
+  log(info.fileName);
+  // 捕获 Dart 异步代码的异常, 既有同步异常，也有异步异常
   runZonedGuarded(() async {
-
     WidgetsFlutterBinding.ensureInitialized();
 
     await initServices();
 
     await MySharedPref.init();
 
-
     Get.put(SettingService());
 
+    ///用于统一显示错误页面
+    ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
+      //自定义错误提示页面
+      return Scaffold(
+          body: Center(
+        child: Text("Custom Error Widget"),
+      ));
+    };
 
-
-
-
-    //方法一  捕获 Flutter 框架的异常
+    //方法一  捕获 Flutter 框架的异常，对于这种异常能不能统一显示一个页面
     FlutterError.onError = (FlutterErrorDetails details) async {
       // 输出到控制台
       // FlutterError.dumpErrorToConsole(details);
@@ -50,15 +69,21 @@ Future<void> main() async {
       print('捕获到 Flutter 异常: ${details.exceptionAsString()}');
       print('堆栈信息: ${details.stack.toString()}');
 
-
       if (isDebugMode) {
         FlutterError.dumpErrorToConsole(details);
       } else {
         ///，我们使用 Zone 提供的 handleUncaughtError 语句，将 Flutter 框架的异常统一转发到当前的 Zone 中，这样我们就可以统一使用 Zone 去处理应用内的所有异常了：
         Zone.current.handleUncaughtError(details.exception, details.stack!);
-        await _uploadError(details.exceptionAsString(), details.stack.toString());
-
+        await _uploadError(
+            details.exceptionAsString(), details.stack.toString());
       }
+
+      //自定义错误提示页面
+      // return Scaffold(
+      //     body: Center(
+      //       child: Text("Custom Error Widget"),
+      //     )
+      // );
     };
 
     // FlutterError.onError = (FlutterErrorDetails details) async {
@@ -66,13 +91,28 @@ Future<void> main() async {
     //   Zone.current.handleUncaughtError(details.exception, details.stack);
     // };
 
+    ///需要对其进行注册
+    // 同时你可以给 runZoned 注册方法，在需要时执行回调，如下代码所示，这样的在一个 Zone 内任何地方，只要能获取 onData 这个 ZoneUnaryCallback，就都可以调用到 handleData///最终需要处理的地方
+    // handleData(result) {
+    //   print("VVVVVVVVVVVVVVVVVVVVVVVVVVV");
+    //   print(result);
+    // }
+    //返回得到一个 ZoneUnaryCallback
+    // var onData = Zone.current.registerUnaryCallback<dynamic, int> (handleData);
+    //执行 ZoneUnaryCallback 返回数据
+    // Zone.current.runUnary(onData, 2);
+    //异步逻辑可以通过 scheduleMicrotask 可以插入异步执行方法:
+    // Zone.current.scheduleMicrotask((){
+    ////todo  something
+    //});
+
     runApp(
         // MyApp()
 
         ///用于对屏幕的尺寸进行适配
         ScreenUtilInit(
-          // todo add your (Xd / Figma) artboard size
-          /**
+            // todo add your (Xd / Figma) artboard size
+            /**
            * reenUtil 依赖于指定的基准尺寸，也就是设计稿的宽高。开发者通常在项目初始化时传入这个基准尺寸，ScreenUtil 以此为参考对所有控件进行缩放。
            */
 
@@ -82,24 +122,15 @@ Future<void> main() async {
             useInheritedMediaQuery: true,
             rebuildFactor: (old, data) => true,
             builder: (context, widget) {
-
               return MyApp();
-
-            })
-
-
-
-    );
+            }));
   }, (Object error, StackTrace stack) async {
     // 转储到设备日志
     print('捕获到 Dart 异常: $error');
     print('堆栈信息: $stack');
     await _uploadError(error.toString(), stack.toString());
   });
-
-
 }
-
 
 bool get isDebugMode {
   bool inDebugMode = false;
@@ -116,6 +147,33 @@ Future initServices() async {
   /// or moor connection, or whatever that's async.
   await Get.putAsync(() => AppService().init());
 }
+
+/**
+ * 因此，对于Dart中出现的异常，同步异常使用的是try-catch，异步异常则使用的是catchError。如果想集中管理代码中的所有异常，
+ * 那么可以Flutter提供的Zone.runZoned()方法。在Dart语言中，Zone表示一个代码执行的环境范围，其概念类似沙盒，
+ * 不同沙盒之间是互相隔离的。如果想要处理沙盒中代码执行出现的异常，可以使用沙盒提供的onError回调函数来拦截那些在代码执行过程中未捕获的异常，如下所示。
+ *
+ * ```
+ * //同步抛出异常
+    runZoned(() {
+    throw StateError('This is a Dart exception.');
+    }, onError: (dynamic e, StackTrace stack) {
+    print('Sync error caught by zone');
+    });
+
+    //异步抛出异常
+    runZoned(() {
+    Future.delayed(Duration(seconds: 1))
+    .then((e) => throw StateError('This is a Dart exception in Future.'));
+    }, onError: (dynamic e, StackTrace stack) {
+    print('Async error aught by zone');
+    });
+ * ```
+ * 可以看到，在没有使用try-catch、catchError语句的情况下，无论是同步异常还是异步异常，都可以使用Zone直接捕获到。
+
+    同时，如果需要集中捕获Flutter应用中未处理的异常，那么可以把main函数中的runApp语句也放置在Zone中，
+    这样就可以在检测到代码运行异常时对捕获的异常信息进行统一处理，如下所示。
+ */
 
 class MyApp extends StatefulWidget {
   @override
@@ -142,7 +200,7 @@ class _MyAppState extends State<MyApp> with HttpErrorListener {
         title: "GetXSkeleton",
         useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
-        builder: (context,widget) {
+        builder: (context, widget) {
           bool themeIsLight = MySharedPref.getThemeIsLight();
           return Theme(
             data: MyTheme.getThemeData(isLight: themeIsLight),
@@ -166,14 +224,11 @@ class _MyAppState extends State<MyApp> with HttpErrorListener {
         //   GlobalCupertinoLocalizations.delegate,
         //   S.delegate,
         // ],
-        locale:  MySharedPref.getCurrentLocal(),
+        locale: MySharedPref.getCurrentLocal(),
         translations: LocalizationService.getInstance(),
-
       ),
     );
   }
-
-
 
   void hideKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);

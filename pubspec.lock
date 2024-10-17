@@ -714,6 +714,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.11.1"
+  stack_trace_info:
+    dependency: "direct main"
+    description:
+      name: stack_trace_info
+      sha256: "7e1836532d927b2e394b1ac6af10444a0cf0cb2051d1154fce271bd236123253"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   stream_channel:
     dependency: transitive
     description:
