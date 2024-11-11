@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/page/setting/history_page.dart';
 
 import 'package:get/get.dart';
 
@@ -87,7 +88,12 @@ class _ProfileTabPageState extends State<ProfileTabPage> with AutomaticKeepAlive
       children: [
         MenuHeaderWidget(title: "Lists"),
         // MenuItemWidget(title: "Watchlist"),
-        MenuItemWidget(title: "History"),
+        MenuItemWidget(title: "History",onPressed: (){
+          Get.to(() => HistoryPage());
+
+        }
+
+          ,),
         // MenuItemWidget(title: "Collection"),
         // MenuItemWidget(title: "Personal Lists"),
         // MenuItemWidget(title: "Reminders"),

@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:mmkv/mmkv.dart';
 import 'package:stack_trace_info/stack_trace_info.dart';
 
 import 'bindings/initial_binding.dart';
@@ -39,6 +40,10 @@ Future<void> main() async {
   //     ),
   //   );
   // };
+
+  // must wait for MMKV to finish initialization
+  final rootDir = await MMKV.initialize();
+  print('MMKV for flutter with rootDir = $rootDir');
 
   final StackTraceInfo info = StackTraceInfo(trace: StackTrace.current);
   log(info.fileName);

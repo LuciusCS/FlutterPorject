@@ -71,7 +71,7 @@ class _HomeTabPageState extends State<HomeTabPage>
                     },
                     child: Container(
                       padding: EdgeInsets.only(top: 20,left: 10,bottom: 10,right: 10),
-                      child: Text("点击跳转"),
+                      child: Text("跳转到组件化的其他页面"),
                     ),
                   )
                   
